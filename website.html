@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan & Fanny Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background: #111;
+        }
+        header h1 {
+            font-size: 2.5em;
+            color: #ff0000;
+        }
+        .guest-name {
+            font-size: 1.5em;
+            color: #ff9900;
+            margin-top: 10px;
+        }
+        .countdown {
+            font-size: 1.5em;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+        .gallery {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .gallery img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .map {
+            text-align: center;
+            margin: 20px 0;
+        }
+        iframe {
+            width: 90%;
+            height: 300px;
+            border: 0;
+            border-radius: 10px;
+        }
+        .comments {
+            background: #111;
+            padding: 20px;
+        }
+        .comments h2 {
+            color: #ff0000;
+        }
+        .comments form {
+            margin: 20px 0;
+        }
+        .comments input, .comments textarea, .comments button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        .comments input, .comments textarea {
+            background: #222;
+            color: #fff;
+        }
+        .comments button {
+            background: #ff0000;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ryan & Fanny's Wedding</h1>
+        <p>Countdown to Our Special Day</p>
+        <div class="guest-name" id="guestName"></div>
+    </header>
+
+    <div class="countdown" id="countdown">Loading...</div>
+
+    <div class="video-container">
+        <video autoplay muted loop>
+            <source src="wedding_intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <section class="gallery">
+        <img src="photo1.jpg" alt="Photo 1">
+        <img src="photo2.jpg" alt="Photo 2">
+        <img src="photo3.jpg" alt="Photo 3">
+        <img src="photo4.jpg" alt="Photo 4">
+    </section>
+
+    <div class="map">
+        <h2>Our Wedding Venue</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.956543429357!2d-122.08424968468149!3d37.4220659798216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb5e870dfcb4f%3A0xfff0f0!2sGoogleplex!5e0!3m2!1sen!2sus!4v1605243126789!5m2!1sen!2sus" allowfullscreen></iframe>
+    </div>
+
+    <section class="comments">
+        <h2>Leave a Comment</h2>
+        <form id="commentForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="commentsSection"></div>
+    </section>
+
+    <script>
+        // Get Guest Name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const guestName = urlParams.get('name');
+        const guestNameElement = document.getElementById('guestName');
+
+        if (guestName) {
+            guestNameElement.textContent = `Welcome, ${guestName}!`;
+        }
+
+        // Countdown Timer
+        const countdownElement = document.getElementById('countdown');
+        const weddingDate = new Date('2025-01-09T12:00:00'); // Adjust to actual date
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = weddingDate - now;
+
+            if (timeLeft <= 0) {
+                countdownElement.textContent = 'The Wedding Day is Here!';
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+
+        // Comments Section
+        const commentForm = document.getElementById('commentForm');
+        const commentsSection = document.getElementById('commentsSection');
+
+        commentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            const comment = document.createElement('div');
+            comment.innerHTML = `<strong>${name}</strong><p>${message}</p>`;
+            commentsSection.prepend(comment);
+
+            commentForm.reset();
+        });
+    </script>
+</body>
+</html>
